@@ -12,11 +12,13 @@
     "babel-jest": "22.4.3",
     "babel-loader": "8.0.0-beta.0",
     "babel-plugin-named-asset-import": "1.0.0-next.3e165448",
+    "babel-plugin-transform-amd-to-commonjs": "^1.2.0",
     "babel-preset-react-app": "4.0.0-next.3e165448",
     "bfj": "5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "cesium": "^1.47.0",
     "chalk": "2.4.1",
+    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "0.28.11",
     "dotenv": "5.0.1",
     "dotenv-expand": "4.2.0",
@@ -28,6 +30,7 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.8.2",
     "file-loader": "1.1.11",
+    "friendly-errors-webpack-plugin": "^1.7.0",
     "fs-extra": "5.0.0",
     "graphql": "0.13.2",
     "graphql-tag": "2.9.2",
@@ -61,7 +64,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "jest . --env=jsdom",
+    "testold": "node scripts/test.js --env=jsdom"
   },
   "browserslist": {
     "development": [
@@ -98,10 +102,11 @@
       "^(?!.*\\.(js|jsx|mjs|css|json|graphql)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$",
+      "[/\\\\]node_modules[/\\\\]((?!cesium).+)\\.(js|jsx|mjs)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "moduleNameMapper": {
+      "cesium": "cesium/Source/Cesium",
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },

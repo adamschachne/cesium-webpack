@@ -3,6 +3,7 @@
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
+const express = require('express');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
 
@@ -82,6 +83,7 @@ module.exports = function(proxy, allowedHost) {
     public: allowedHost,
     proxy,
     before(app) {
+      app.use("/cesium", express.static('../node_modules/cesium/Build/CesiumUnminified/'));
       // This lets us open files from the runtime error overlay.
       app.use(errorOverlayMiddleware());
       // This service worker file is effectively a 'no-op' that will reset any

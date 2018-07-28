@@ -13,6 +13,8 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -137,7 +139,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+      'cesium': 'cesium/Source/Cesium',
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -152,6 +154,7 @@ module.exports = {
     ],
   },
   module: {
+    unknownContextCritical: false,
     strictExportPresence: true,
     rules: [
       // Disable require.ensure as it's not a standard language feature.
@@ -170,7 +173,7 @@ module.exports = {
               baseConfig: {
                 extends: [require.resolve('eslint-config-react-app')],
               },
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -212,7 +215,7 @@ module.exports = {
               {
                 loader: require.resolve('babel-loader'),
                 options: {
-                  
+
                   presets: [require.resolve('babel-preset-react-app')],
                   plugins: [
                     [
@@ -336,6 +339,16 @@ module.exports = {
     ],
   },
   plugins: [
+    new FriendlyErrorsWebpackPlugin(),
+    // Copy Cesium Assets, Widgets, and Workers to a static directory
+    // The path to the cesium source code
+    new CopyWebpackPlugin([{ from: 'node_modules/cesium/Build/Cesium/Workers', to: 'cesium/Workers' }]),
+    new CopyWebpackPlugin([{ from: 'node_modules/cesium/Source/Assets', to: 'cesium/Assets' }]),
+    new CopyWebpackPlugin([{ from: 'node_modules/cesium/Source/Widgets', to: 'cesium/Widgets' }]),
+    new webpack.DefinePlugin({
+      // Define relative base path in cesium for loading assets
+      CESIUM_BASE_URL: JSON.stringify('./cesium')
+    }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,

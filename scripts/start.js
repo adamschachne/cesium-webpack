@@ -22,7 +22,7 @@ const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const {
   choosePort,
-  createCompiler,
+  // createCompiler,
   prepareProxy,
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
@@ -77,13 +77,14 @@ checkBrowsers(paths.appPath)
     const appName = require(paths.appPackageJson).name;
     const urls = prepareUrls(protocol, HOST, port);
     // Create a webpack compiler that is configured with custom messages.
-    const compiler = createCompiler(
-      webpack,
-      config,
-      appName,
-      urls,
-      paths.useYarn
-    );
+    // const compiler = createCompiler(
+    //   webpack,
+    //   config,
+    //   appName,
+    //   urls,
+    //   paths.useYarn
+    // );
+    const compiler = webpack(config);
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
